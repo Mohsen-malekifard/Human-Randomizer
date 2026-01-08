@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Human Randomizer</title>
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: monospace;
+    }
+
+    body {
+        margin: 0;
+        background: #0e0e0e;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .box {
+        width: 90%;
+        max-width: 500px;
+        background: #151515;
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        box-shadow: 0 0 40px rgba(0,0,0,0.7);
+    }
+
+    .text {
+        font-size: 18px;
+        line-height: 1.6;
+        min-height: 120px;
+        margin-bottom: 20px;
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+
+    .text.show {
+        opacity: 1;
+    }
+
+    button {
+        background: #fff;
+        color: #000;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 6px;
+    }
+
+    button:hover {
+        background: #ddd;
+    }
+
+    .small {
+        font-size: 11px;
+        opacity: 0.4;
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <div class="text" id="text"></div>
+    <div id="buttons"></div>
+    <div class="small">This system may judge you.</div>
+</div>
+
+<script>
+const textEl = document.getElementById("text");
+const buttonsEl = document.getElementById("buttons");
+
+let mood = Math.random();
+let patience = 100;
+
+const messages = [
+    "Be honest. You expected something more impressive, didn't you?",
+    "You're still here. That says something.",
+    "Most people stop earlier than this.",
+    "You clicked faster this time. Interesting.",
+    "This question has no purpose. Just like some decisions.",
+    "Do you usually finish what you start?",
+    "You didn't have to continue. Yet you did.",
+    "This is not testing you. Or maybe it is.",
+    "You are aware this is meaningless. That makes it meaningful.",
+    "Some people overthink this part.",
+    "You're waiting for a pattern. There isn't one.",
+    "This system does not care. Or pretends not to.",
+    "You read this slower than the previous one.",
+    "You expected a reward by now.",
+    "You are not being judged. Probably.",
+    "This interaction says more about patience than intelligence.",
+    "You could stop anytime.",
+    "You won't remember this tomorrow.",
+    "You might screenshot this.",
+    "This sentence exists only to be read once.",
+    "You trust buttons too easily.",
+    "You hesitated before clicking.",
+    "That choice felt right. Or random.",
+    "You like knowing what's next.",
+    "There is no next level.",
+    "You are still looking for meaning.",
+    "Most users click instinctively.",
+    "You are slightly curious right now.",
+    "This sentence delays you on purpose.",
+    "You are aware you're wasting time.",
+    "You could be doing something else.",
+    "This isn't productivity.",
+    "This isn't entertainment either.",
+    "You're between boredom and curiosity.",
+    "You expected logic.",
+    "You expected chaos.",
+    "You got neither.",
+    "This text will disappear soon.",
+    "You didn't read the small text, did you?",
+    "You trust the interface.",
+    "You don't trust the message.",
+    "You want control.",
+    "There is none.",
+    "You noticed the tone change.",
+    "This program changes its mind.",
+    "You might close this tab soon.",
+    "Not yet though.",
+    "This sentence exists to test attention.",
+    "You skimmed the last one.",
+    "You read this one fully.",
+    "You are more patient than average.",
+    "Or just bored.",
+    "You prefer clicking over thinking.",
+    "Thinking is optional here.",
+    "You expected a trick.",
+    "That was the trick.",
+    "You expected this to end.",
+    "It won't.",
+    "You are comfortable with ambiguity.",
+    "Or pretending to be.",
+    "You enjoy being observed.",
+    "You dislike being analyzed.",
+    "This sentence judges you silently.",
+    "You will disagree with that.",
+    "You are aware this is scripted.",
+    "Yet it feels personal.",
+    "This interaction is temporary.",
+    "Your reaction is real.",
+    "You expected something smarter.",
+    "You're still reading.",
+    "This sentence rewards attention with nothing.",
+    "You didn't expect honesty.",
+    "Neither did the system.",
+    "You want closure.",
+    "There is no closure.",
+    "This sentence is filler.",
+    "You still read it.",
+    "You're not sure why.",
+    "Curiosity is enough.",
+    "You made it this far.",
+    "That doesn't mean anything.",
+    "Or maybe it does.",
+    "You prefer clarity.",
+    "This avoids it.",
+    "You're checking how long this goes.",
+    "Longer than expected.",
+    "You're smiling slightly.",
+    "Or frowning.",
+    "This program adapts randomly.",
+    "Just like people.",
+    "You expected intelligence.",
+    "You got reflection.",
+    "This isn't deep.",
+    "You made it deep.",
+    "You want the next sentence.",
+    "Here it is.",
+    "You expected something different.",
+    "You always do."
+];
+
+function randomMessage() {
+    return messages[Math.floor(Math.random() * messages.length)];
+}
+
+function showText(msg) {
+    textEl.classList.remove("show");
+    setTimeout(() => {
+        textEl.textContent = msg;
+        textEl.classList.add("show");
+    }, 200);
+}
+
+function clearButtons() {
+    buttonsEl.innerHTML = "";
+}
+
+function addButton(label, action) {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.onclick = action;
+    buttonsEl.appendChild(btn);
+}
+
+function nextStep() {
+    clearButtons();
+    patience -= Math.random() * 10;
+
+    if (patience < 30 && Math.random() > 0.5) {
+        showText("You seem tired. Or maybe impatient.");
+        addButton("I'm fine", nextStep);
+        addButton("Stop judging me", nextStep);
+        return;
+    }
+
+    const r = Math.random();
+
+    if (r < 0.3) {
+        showText(randomMessage());
+        addButton("Yes", () => react("yes"));
+        addButton("No", () => react("no"));
+    } else if (r < 0.6) {
+        showText("Click any button. It doesn't matter.");
+        addButton("This one", nextStep);
+        addButton("That one", nextStep);
+    } else {
+        showText("Waiting is also a choice.");
+        addButton("Wait", () => {
+            showText("You waited. Noted.");
+            setTimeout(nextStep, 1000);
+        });
+        addButton("Continue", nextStep);
+    }
+}
+
+function react(answer) {
+    clearButtons();
+
+    if (Math.random() > 0.5) {
+        showText("I expected that answer.");
+    } else {
+        showText("Interesting choice. Or was it random?");
+    }
+
+    setTimeout(nextStep, 1200);
+}
+
+showText("Hello. Let's waste time intelligently.");
+addButton("Start", nextStep);
+</script>
+
+</body>
+</html>
